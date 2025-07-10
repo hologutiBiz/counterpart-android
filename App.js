@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-  ActivityIndicator,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions, ActivityIndicator, ImageBackground } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { VLB_MOBILE_SECRET, ENDPOINT_URL } from '@env';
 
@@ -74,8 +68,8 @@ const ChartScreen = () => {
       </View>
 
       {dataset.map((item, idx) => (
-        <View key={item.number} style={[styles.tableRow, idx % 2 === 0 && styles.altRow]}>
-          <Text style={styles.cell}>{item.number}</Text>
+        <View key={item.number} style={[styles.tableRow, styles.altRow]}>
+          <Text style={styles.numCell}>{item.number}</Text>
           <Text style={styles.cell}>{item.counterpart}</Text>
           <Text style={styles.cell}>{item.bonanza}</Text>
           <Text style={styles.cell}>{item.malta}</Text>
@@ -98,18 +92,37 @@ const ChartScreen = () => {
   ); 
 
   return (
-    <ScrollView contentContainerStyle={[styles.container, { flexDirection: isTablet ? 'row' : 'column' }]}>
-      {renderTable(data.one_to_fortyfive, '1 to 45')}
-      {renderTable(data.fortysix_to_ninety, '46 to 90')}
-    </ScrollView>
+    <SafeAreaView style={styles.safeWrapper}>
+      <ImageBackground
+        source={require("./assets/Lotto_shot.webp")}
+        style={styles.background}
+        resizeMode='cover'
+      >
+        <ScrollView contentContainerStyle={[styles.container, { flexDirection: isTablet ? 'row' : 'column' }]}>
+          {renderTable(data.one_to_fortyfive)}
+          {renderTable(data.fortysix_to_ninety)}
+        </ScrollView>
+      </ImageBackground>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeWrapper: {
+    flex: 1,
+    backgroundColor: '#000', // fallback in case image doesn’t load
+},
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%', 
+  },
   container: {
     justifyContent: 'center',
-    padding: 12,
+    // padding: 12,
     gap: 20,
+    paddingBottom: 100,
+    paddingTop: 100
   },
   tableWrapper: {
     flex: 1,
@@ -117,43 +130,63 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 6,
     overflow: 'hidden',
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
   },
   tableTitle: {
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 16,
-    paddingVertical: 8,
-    backgroundColor: '#f0f0f0',
+    // fontSize: 16,
+    // paddingVertical: 8,
+    // backgroundColor: '#f0f0f0',
   },
   tableHeader: {
     flexDirection: 'row',
-    backgroundColor: '#f8f8f8',
-    paddingVertical: 4,
+    backgroundColor: '#ff0000',
+    // position: "absolute",
+    // top: 0,
+    zIndex: 10,
+    paddingVertical: 6,
+    width: '100%',
+    // paddingVertical: 4,
     borderBottomWidth: 1,
-    borderColor: '#ccc',
+    // borderColor: '#ccc',
   },
   headerCell: {
     flex: 1,
+    color: '#fff',
+    padding: 5,
     textAlign: 'center',
+    // transform: [{ rotate: '-180deg' }],
+    writingDirection: 'ltr', // approximate vertical feel
     fontWeight: 'bold',
-    color: '#333',
-    fontSize: 12,
   },
   tableRow: {
     flexDirection: 'row',
     paddingVertical: 6,
     borderBottomWidth: 1,
-    borderColor: '#eee',
+    borderColor: '#000',
   },
   altRow: {
-    backgroundColor: '#fafafa',
+    backgroundColor: '#ffff00',
+    margin: 1,
+  },
+  numCell: {
+    flex: 1,
+    backgroundColor: '#800080',
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: '400',
+    paddingVertical: 6,
+    paddingHorizontal: 4,
   },
   cell: {
     flex: 1,
     textAlign: 'center',
-    fontSize: 12,
+    fontWeight: '400',
+    fontSize: 15,
     color: '#444',
+        margin: 2,
+
   },
   errorWrapper: {
   flex: 1,
